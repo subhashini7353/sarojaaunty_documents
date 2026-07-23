@@ -160,7 +160,7 @@
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 8px;
-      display: none;
+      display: block;
       cursor: pointer;
       transition: opacity 0.2s;
     }
@@ -241,7 +241,7 @@
 
       <div class="member-card" onclick="navigateTo('page-docs')">
         <!-- Personal Photo of Saroja -->
-        <img src="https://via.placeholder.com/120" alt="Saroja" class="profile-photo" id="saroja-profile-pic">
+        <img src="pic.jpeg" alt="Saroja" class="profile-photo" id="saroja-profile-pic">
         <div class="member-name">Saroja</div>
         <div class="member-subtitle">Click to view documents</div>
       </div>
@@ -260,7 +260,7 @@
         <div class="upload-grid">
           <div class="upload-box">
             <span class="upload-label">Photo 1 (Front)</span>
-            <img id="preview-aadhaar-1" class="preview-thumb" alt="Aadhaar Front" onclick="openModal(this.src)">
+            <img src="aadhar1.jpeg" class="preview-thumb" alt="Aadhaar Front" onclick="openModal(this.src)">
             <label class="upload-btn">
               Upload
               <input type="file" accept="image/*" onchange="previewImage(this, 'preview-aadhaar-1')">
@@ -268,7 +268,7 @@
           </div>
           <div class="upload-box">
             <span class="upload-label">Photo 2 (Back)</span>
-            <img id="preview-aadhaar-2" class="preview-thumb" alt="Aadhaar Back" onclick="openModal(this.src)">
+            <img src="Screenshot 2026-07-23 143326.png" class="preview-thumb" alt="Aadhaar Back" onclick="openModal(this.src)">
             <label class="upload-btn">
               Upload
               <input type="file" accept="image/*" onchange="previewImage(this, 'preview-aadhaar-2')">
@@ -283,7 +283,7 @@
         <div class="upload-grid">
           <div class="upload-box">
             <span class="upload-label">Photo 1 (Front)</span>
-            <img id="preview-pan-1" class="preview-thumb" alt="PAN Front" onclick="openModal(this.src)">
+            <img src="Screenshot 2026-07-23 143345.png" class="preview-thumb" alt="PAN Front" onclick="openModal(this.src)">
             <label class="upload-btn">
               Upload
               <input type="file" accept="image/*" onchange="previewImage(this, 'preview-pan-1')">
@@ -291,7 +291,7 @@
           </div>
           <div class="upload-box">
             <span class="upload-label">Photo 2 (Back)</span>
-            <img id="preview-pan-2" class="preview-thumb" alt="PAN Back" onclick="openModal(this.src)">
+            <img src="Screenshot 2026-07-23 143415.png" class="preview-thumb" alt="PAN Back" onclick="openModal(this.src)">
             <label class="upload-btn">
               Upload
               <input type="file" accept="image/*" onchange="previewImage(this, 'preview-pan-2')">
@@ -306,7 +306,7 @@
         <div class="upload-grid">
           <div class="upload-box">
             <span class="upload-label">Photo 1 (Front)</span>
-            <img id="preview-passbook-1" class="preview-thumb" alt="Passbook Front" onclick="openModal(this.src)">
+            <img src="Screenshot 2026-07-23 143359.png" class="preview-thumb" alt="Passbook Front" onclick="openModal(this.src)">
             <label class="upload-btn">
               Upload
               <input type="file" accept="image/*" onchange="previewImage(this, 'preview-passbook-1')">
@@ -314,7 +314,7 @@
           </div>
           <div class="upload-box">
             <span class="upload-label">Photo 2 (Back)</span>
-            <img id="Screenshot 2026-07-23 143426.png" class="preview-thumb" alt="Passbook Back" onclick="openModal(this.src)">
+            <img src="Screenshot 2026-07-23 143426.png" class="preview-thumb" alt="Passbook Back" onclick="openModal(this.src)">
             <label class="upload-btn">
               Upload
               <input type="file" accept="image/*" onchange="previewImage(this, 'preview-passbook-2')">
