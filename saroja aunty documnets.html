@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saroja's Digital Vault</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .page {
+      display: none;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .btn-back {
+      background: #f1f5f9;
+      border: none;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-back:hover {
+      background: #e2e8f0;
+    }
+
+    /* Home View - Member Selection */
+    .member-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+
+    .member-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 16px;
+      border: 3px solid var(--primary);
+    }
+
+    .member-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .member-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Documents View */
+    .doc-section {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .doc-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .doc-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .upload-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .upload-box {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      position: relative;
+      background: #fafafa;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Previewable images */
+    .preview-thumb {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: block;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .preview-thumb:hover {
+      opacity: 0.85;
+    }
+
+    .upload-box input[type="file"] {
+      display: none;
+    }
+
+    .upload-btn {
+      background: var(--primary);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .upload-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Fullscreen Modal Lightbox */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      object-fit: contain;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- PAGE 1: MEMBER SELECT -->
+    <div id="page-home" class="page active">
+      <header>
+        <h1>Vault Member</h1>
+      </header>
+
+      <div class="member-card" onclick="navigateTo('page-docs')">
+        <!-- Personal Photo of Saroja -->
+        <img src="pic.jpeg" alt="Saroja" class="profile-photo" id="saroja-profile-pic">
+        <div class="member-name">Saroja</div>
+        <div class="member-subtitle">Click to view documents</div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: DOCUMENTS -->
+    <div id="page-docs" class="page">
+      <header>
+        <button class="btn-back" onclick="navigateTo('page-home')">← Back</button>
+        <h1>Saroja's Documents</h1>
+      </header>
+
+      <!-- AADHAAR CARD SECTION -->
+      <div class="doc-section">
+        <div class="doc-title">Aadhaar Card</div>
+        <div class="upload-grid">
+          <div class="upload-box">
+            <span class="upload-label">Photo 1 (Front)</span>
+            <img src="aadhar1.jpeg" class="preview-thumb" alt="Aadhaar Front" onclick="openModal(this.src)">
+            <label class="upload-btn">
+              Upload
+              <input type="file" accept="image/*" onchange="previewImage(this, 'preview-aadhaar-1')">
+            </label>
+          </div>
+          <div class="upload-box">
+            <span class="upload-label">Photo 2 (Back)</span>
+            <img src="Screenshot 2026-07-23 143326.png" class="preview-thumb" alt="Aadhaar Back" onclick="openModal(this.src)">
+            <label class="upload-btn">
+              Upload
+              <input type="file" accept="image/*" onchange="previewImage(this, 'preview-aadhaar-2')">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAN CARD SECTION -->
+      <div class="doc-section">
+        <div class="doc-title">PAN Card</div>
+        <div class="upload-grid">
+          <div class="upload-box">
+            <span class="upload-label">Photo 1 (Front)</span>
+            <img src="Screenshot 2026-07-23 143345.png" class="preview-thumb" alt="PAN Front" onclick="openModal(this.src)">
+            <label class="upload-btn">
+              Upload
+              <input type="file" accept="image/*" onchange="previewImage(this, 'preview-pan-1')">
+            </label>
+          </div>
+          <div class="upload-box">
+            <span class="upload-label">Photo 2 (Back)</span>
+            <img src="Screenshot 2026-07-23 143415.png" class="preview-thumb" alt="PAN Back" onclick="openModal(this.src)">
+            <label class="upload-btn">
+              Upload
+              <input type="file" accept="image/*" onchange="previewImage(this, 'preview-pan-2')">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASSBOOK SECTION -->
+      <div class="doc-section">
+        <div class="doc-title">Passbook</div>
+        <div class="upload-grid">
+          <div class="upload-box">
+            <span class="upload-label">Photo 1 (Front)</span>
+            <img src="Screenshot 2026-07-23 143359.png" class="preview-thumb" alt="Passbook Front" onclick="openModal(this.src)">
+            <label class="upload-btn">
+              Upload
+              <input type="file" accept="image/*" onchange="previewImage(this, 'preview-passbook-1')">
+            </label>
+          </div>
+          <div class="upload-box">
+            <span class="upload-label">Photo 2 (Back)</span>
+            <img src="Screenshot 2026-07-23 143426.png" class="preview-thumb" alt="Passbook Back" onclick="openModal(this.src)">
+            <label class="upload-btn">
+              Upload
+              <input type="file" accept="image/*" onchange="previewImage(this, 'preview-passbook-2')">
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- LIGHTBOX MODAL FOR FULLSCREEN PREVIEW -->
+  <div id="image-modal" class="modal" onclick="closeModal()">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <img id="modal-img" class="modal-img" src="" alt="Enlarged Document">
+  </div>
+
+  <script>
+    // Page Navigation
+    function navigateTo(pageId) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    // Image Upload & Display Preview
+    function previewImage(input, imgElementId) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById(imgElementId);
+          img.src = e.target.result;
+          img.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Modal Lightbox Functions
+    function openModal(imageSrc) {
+      if (!imageSrc) return;
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      modalImg.src = imageSrc;
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('image-modal');
+      modal.classList.remove('active');
+    }
+  </script>
+</body>
+</html>
